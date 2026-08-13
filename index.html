@@ -335,7 +335,10 @@ h2.crc-box-header {
 
 /* ---- Print -------------------------------------------------- */
 @media print {
-  .crc-app { background: #fff; font-size: 12pt; }
+  @page { size: letter; margin: 0.4in; }
+
+  .crc-app { background: #fff; font-size: 9.5pt; line-height: 1.25; }
+
   .crc-accents,
   .crc-banner,
   .crc-titlebar,
@@ -345,19 +348,47 @@ h2.crc-box-header {
   .crc-alert,
   .crc-hdr-star,
   #crc-incident-iq { display: none !important; }
-  .crc-box { box-shadow: none; border: none; margin: 0; padding: 0; }
+
+  .crc-main { margin: 0; padding: 0; max-width: none; }
+
+  .crc-box {
+    box-shadow: none; border: none; margin: 0; padding: 0;
+    page-break-inside: avoid;
+  }
+
   .crc-box-header {
     background: none !important; color: #000 !important; text-shadow: none;
-    border-bottom: 2px solid #000; text-align: center;
-    padding: 0 0 0.3rem; margin-bottom: 1rem;
+    border-bottom: 1.5pt solid #000; text-align: center;
+    font-size: 13pt;
+    padding: 0 0 0.15rem; margin-bottom: 0.5rem;
   }
+
   .crc-box-body { padding: 0; }
-  .crc-field > label { color: #000; }
-  .crc-option { background: #fff; border: none; padding: 0.1rem 0; }
+
+  .crc-field { margin-bottom: 0.55rem; page-break-inside: avoid; }
+  .crc-field > label { color: #000; margin-bottom: 0.2rem; font-size: 9.5pt; }
+
+  .crc-options { gap: 0.15rem 0.6rem; margin-top: 0.15rem; }
+  .crc-option { background: #fff; border: none; padding: 0.05rem 0; gap: 0.35rem; }
+  .crc-option input[type="checkbox"],
+  .crc-option input[type="radio"] { width: 12px; height: 12px; }
+  .crc-option input:checked + label { color: #000; }
+
   .crc-field input[type="text"],
   .crc-field input[type="email"],
-  .crc-field textarea { border: 1px solid #999; background: #fff; resize: none; }
-  .crc-option input:checked + label { color: #000; }
+  .crc-field textarea {
+    border: none;
+    border-bottom: 1pt solid #999;
+    border-radius: 0;
+    background: #fff;
+    resize: none;
+    padding: 0.15rem 0.1rem;
+    font-size: 9.5pt;
+  }
+  .crc-field textarea { min-height: 34px; }
+
+  .crc-inline { gap: 0.6rem; }
+
   .crc-required { color: #000; }
 }
 </style>
