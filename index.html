@@ -633,30 +633,58 @@ h2.crc-box-header {
   }
 
   function blip(){
-    if (!soundOn) return;
-    var ctx = ensureCtx();
-    if (!ctx) return;
-    var t = ctx.currentTime;
-    var osc = ctx.createOscillator();
-    var gain = ctx.createGain();
-    var waves = ['square', 'triangle', 'sawtooth'];
-    osc.type = waves[(Math.random() * waves.length) | 0];
-    var base = 300 + Math.random() * 560;
-    osc.frequency.setValueAtTime(base, t);
-    if (Math.random() < 0.12){            // occasional boing
-      osc.frequency.exponentialRampToValueAtTime(base * 1.9, t + 0.05);
-      osc.frequency.exponentialRampToValueAtTime(base * 0.55, t + 0.2);
-    } else {
-      osc.frequency.exponentialRampToValueAtTime(base * 0.72, t + 0.09);
-    }
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.085, t + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.17);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(t);
-    osc.stop(t + 0.2);
+  if (!soundOn) return;
+  var ctx = ensureCtx();
+  if (!ctx) return;
+  var t = ctx.currentTime;
+
+  var osc = ctx.createOscillator();
+  var gain = ctx.createGain();
+  var waves = ['square', 'triangle', 'sawtooth', 'sine'];
+  osc.type = waves[(Math.random() * waves.length) | 0];
+
+  // Pick a musical-ish base pitch so random blips don't clash too badly
+  var scale = [220, 247, 262, 294, 330, 349, 392, 440, 494, 523, 587, 659];
+  var start = scale[(Math.random() * scale.length) | 0];
+
+  // Choose one of several glissando shapes
+  var shape = Math.floor(Math.random() * 5);
+  var dur = 0.16 + Math.random() * 0.12; // 0.16–0.28s
+
+  switch (shape) {
+    case 0: // rising slide
+      osc.frequency.setValueAtTime(start * 0.6, t);
+      osc.frequency.exponentialRampToValueAtTime(start * 2.2, t + dur);
+      break;
+    case 1: // falling slide
+      osc.frequency.setValueAtTime(start * 2.0, t);
+      osc.frequency.exponentialRampToValueAtTime(start * 0.5, t + dur);
+      break;
+    case 2: // boing (up then down)
+      osc.frequency.setValueAtTime(start * 0.7, t);
+      osc.frequency.exponentialRampToValueAtTime(start * 2.4, t + dur * 0.35);
+      osc.frequency.exponentialRampToValueAtTime(start * 0.45, t + dur);
+      break;
+    case 3: // whoop (down then up)
+      osc.frequency.setValueAtTime(start * 1.6, t);
+      osc.frequency.exponentialRampToValueAtTime(start * 0.5, t + dur * 0.4);
+      osc.frequency.exponentialRampToValueAtTime(start * 1.9, t + dur);
+      break;
+    case 4: // long swoop, wider range
+      osc.frequency.setValueAtTime(start * 3.0, t);
+      osc.frequency.exponentialRampToValueAtTime(start * 0.35, t + dur);
+      break;
   }
+
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(0.08, t + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.02);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
 
   var skip = { Tab:1, Shift:1, Control:1, Alt:1, Meta:1, CapsLock:1, Escape:1,
                ArrowLeft:1, ArrowRight:1, ArrowUp:1, ArrowDown:1, Home:1, End:1 };
