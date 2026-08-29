@@ -5,8 +5,8 @@ twelve hex of their sha256. Both copyright lines were read out of the binaries'
 own `name` tables.
 
 Both families are under the SIL Open Font License, Version 1.1 — see `OFL.txt`
-beside this note. The licence's second condition asks that redistributed copies
-carry the notice and the licence; that is what these two files are.
+beside this note. The license's second condition asks that redistributed copies
+carry the notice and the license; that is what these two files are.
 
 | File | Family | Copyright |
 | --- | --- | --- |
